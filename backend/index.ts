@@ -13,6 +13,7 @@ import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
 import routes from "./app/routes";
 import { type IUser } from "./app/user/user.dto";
+import { initRedis } from "./app/common/services/redis.service";
 
 declare global {
   namespace Express {
@@ -37,6 +38,9 @@ app.use(limiter);
 const initApp = async (): Promise<void> => {
   // init mongodb
   await initDB();
+
+  //init RedisClient
+  await initRedis();
 
   // passport init
   initPassport();
