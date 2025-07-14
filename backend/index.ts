@@ -1,4 +1,3 @@
-import { JsonObject } from "./node_modules/@types/swagger-ui-express/index.d";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
@@ -8,7 +7,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./docs/swagger.json";
 import { loadConfig } from "./app/common/helper/config.hepler";
 loadConfig();
-
+import limiter from "./app/common/middleware/rate-limiter.middleware";
 import errorHandler from "./app/common/middleware/error-handler.middleware";
 import { initDB } from "./app/common/services/database.service";
 import { initPassport } from "./app/common/services/passport-jwt.service";
@@ -33,6 +32,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(limiter);
 
 const initApp = async (): Promise<void> => {
   // init mongodb
