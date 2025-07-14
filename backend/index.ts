@@ -1,9 +1,11 @@
+import { JsonObject } from "./node_modules/@types/swagger-ui-express/index.d";
 import bodyParser from "body-parser";
 import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import http from "http";
 import morgan from "morgan";
-
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./docs/swagger.json";
 import { loadConfig } from "./app/common/helper/config.hepler";
 loadConfig();
 
@@ -41,6 +43,7 @@ const initApp = async (): Promise<void> => {
 
   // set base path to /api
   app.use("/api", routes);
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.get("/", (req: Request, res: Response) => {
     res.send({ status: "ok" });
